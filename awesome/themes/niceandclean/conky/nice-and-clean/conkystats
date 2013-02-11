@@ -1,0 +1,37 @@
+background no
+use_xft yes
+xftfont Helvetica:size=15
+xftalpha 0.9
+update_interval 3.0
+total_run_times 0
+own_window yes
+own_window_type desktop
+own_window_transparent yes
+own_window_hints undecorated,sticky,skip_taskbar,skip_pager
+double_buffer yes
+#minimum_size  1000
+#maximum_width 700
+draw_shades yes
+draw_outline no
+draw_borders no
+draw_graph_borders yes
+default_color 808080
+default_shade_color 101319
+default_outline_color green
+alignment top_left
+gap_x 255
+gap_y 400
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+override_utf8_locale yes
+
+TEXT
+${color ce2c51}RAM: ${goto 120}CPU: ${goto 280}Battery: ${goto 450}System:     
+${color grey}${mem}  ${goto 130}${freq } MHz ${goto 300}${color grey}${battery_percent} % ${goto 450}${uptime}
+${color 737373}${memmax} ${color grey}${goto 130}${freq 2} MHz ${goto 280} ${exec cat /proc/acpi/battery/BAT0/state | grep remaining | cut -c26-34} ${goto 450} ${exec cat /proc/acpi/battery/BAT0/state | grep charging | awk '{print $3}'}
+${color grey}Swap ${swapperc}% ${goto 140} ${exec sensors | sed -n '8p' | awk '{print $ 2}' | cut -c2-8} ${goto 280} ${exec cat /proc/acpi/battery/BAT0/state | grep voltage | cut -c26-34}
+CPU ${cpu cpu1} %, ${cpu cpu2} % ${cpubar}
+File System ${fs_used /} | ${fs_size} ${fs_bar /}
+Battery ${battery_bar}
+
