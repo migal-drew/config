@@ -22,7 +22,10 @@ function start_daemon(dae)
         os.execute(dae .. " &")
     end
 end
-procs = {"gnome-settings-daemon", "nm-applet", "xbacklight -set 50"}
+procs = {
+    "gnome-settings-daemon", 
+    "nm-applet", 
+    "xbacklight -set 50"}
 for k = 1, #procs do
     start_daemon(procs[k])
 end
@@ -423,11 +426,11 @@ globalkeys = awful.util.table.join(
 	,
     
     -- Volume Control
-    --awful.key({ }, "XF86AudioRaiseVolume", function () volumecfg.up() end),
-    --awful.key({ }, "XF86AudioLowerVolume", function () volumecfg.down() end),
+    awful.key({ }, "XF86AudioRaiseVolume", function () volumecfg.up() end),
+    awful.key({ }, "XF86AudioLowerVolume", function () volumecfg.down() end),
     --awful.key({ }, "XF86AudioMute", function () volumecfg.toggle() end))
-    awful.key({ modkey }, "F12", function () volumecfg.up() end),
-    awful.key({ modkey }, "F11", function () volumecfg.down() end),
+    --awful.key({ modkey }, "F12", function () volumecfg.up() end),
+    --awful.key({ modkey }, "F11", function () volumecfg.down() end),
     
     -- Custom programs
     awful.key({ modkey }, "g", function () awful.util.spawn("chromium-browser") end),
@@ -514,7 +517,8 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-                     buttons = clientbuttons } },
+                     buttons = clientbuttons,
+                     size_hints_honor = false  } },
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
