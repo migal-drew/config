@@ -10,3 +10,6 @@ Zsh
 
 Login
 ~/.profile
+
+How to launch nautilus without desktop environment:
+/usr/bin/nautilus --no-desktop #sh script, replace real nautilus
