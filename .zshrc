@@ -1,61 +1,62 @@
-# Set up the prompt
-autoload -Uz promptinit
-promptinit
-prompt adam2
+# Path to your oh-my-zsh configuration.
+ZSH=$HOME/.oh-my-zsh
 
-setopt histignorealldups sharehistory
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+autoload -U colors
+colors
+#ZSH_THEME="robbyrussell"
+#ZSH_THEME="random"
+ZSH_THEME="fino-time"
 
-# Chanhe directory without 'cd' command
-setopt AUTO_CD
+# Set to this to use case-sensitive completion
+# CASE_SENSITIVE="true"
 
-# Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
+# Comment this out to disable bi-weekly auto-update checks
+# DISABLE_AUTO_UPDATE="true"
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
+# Uncomment to change how often before auto-updates occur? (in days)
+# export UPDATE_ZSH_DAYS=13
 
-# Use modern completion system
-autoload -Uz compinit
-compinit
+# Uncomment following line if you want to disable colors in ls
+# DISABLE_LS_COLORS="true"
 
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2
-# eval "$(dircolors -b)"
-eval "$(dircolors ~/.dir_colors)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' menu select=long
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
+# Uncomment following line if you want to disable autosetting terminal title.
+# DISABLE_AUTO_TITLE="true"
 
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+# Uncomment following line if you want to disable command autocorrection
+# DISABLE_CORRECTION="true"
 
+# Uncomment following line if you want red dots to be displayed while waiting for completion
+# COMPLETION_WAITING_DOTS="true"
 
+# Uncomment following line if you want to disable marking untracked files under
+# VCS as dirty. This makes repository status check for large repositories much,
+# much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# PROMPT
-PROMPT="%# "
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+
+#--------------------------------------------------------------------------#
+#-------------Customize to your needs...-----------------------------------#
+#--------------------------------------------------------------------------#
+#eval "$(dircolors ~/.dir_colors)"
+
 # Right promt, time
-RPROMPT=$'%{\e[1;31m%}[%{\e[1;37m%}%T%{\e[1;31m%}]%{\e[0m%}'
-
-# Colorize red for root, green for normal users
-if [[ "$USER" == "root" ]]; then
-  COLOR="%{[0m[01;31m%}"
-else
-  COLOR="%{[0m[01;32m%}"
-fi
+RPROMPT=$'%{\e[1;31m%}[%{\e[1;37m%}%*%{\e[1;31m%}]%{\e[0m%}'
 
 # Aliases
 alias ls='ls --classify --color --human-readable --group-directories-first'
 alias l='ls --classify --color --human-readable --group-directories-first'
+alias ll='ls -l --classify --color --human-readable --group-directories-first'
+
 alias cp='nocorrect cp --interactive --verbose --recursive --preserve=all'
 alias mv='nocorrect mv --verbose --interactive'
 alias grep='grep --colour=auto'
@@ -69,7 +70,6 @@ alias -s py=python
 alias -s {odt,doc,sxw,rtf}=openoffice.org
 autoload -U pick-web-browser
 alias -s {html,htm}=chromium
-
 
 # Распаковка архивов
 # example: extract file
@@ -114,6 +114,5 @@ pk () {
  fi
 }
 
-# source /home/andrey/utilities/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export LD_PRELOAD="/home/andrey/utilities/stderred/build/libstderred.so"
 export LD_LIBRARY_PATH=/opt/lib:/opt/opencv_2.4.4/lib   

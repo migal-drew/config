@@ -1,4 +1,4 @@
-colorscheme solarized
+colorscheme elflord
 let g:solarized_termcolors=256
 
 "Вырубаем режим совместимости с VI:
@@ -38,8 +38,6 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-
-
 
 "Авто комплит по табу
 function InsertTabWrapper()
@@ -114,3 +112,8 @@ function! InsertTabWrapper(direction)
  endfunction
 inoremap <tab> <c-r>=InsertTabWrapper ("forward")<cr>
 inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
+
+"Включаем плагин nerdtree
+autocmd vimenter * NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd VimEnter * wincmd l
