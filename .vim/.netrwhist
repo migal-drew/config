@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/home/kirill/Загрузки'
+let g:netrw_dirhist_2='/home/kirill/coding/MyPy/carplate'
+let g:netrw_dirhist_3='/home/andrey/.config/awesome'
+let g:netrw_dirhist_4='/home/andrey/Downloads/libcvd/make'
+let g:netrw_dirhist_5='/home/andrey/Videos'
+let g:netrw_dirhist_6='/media/windows/University/5_course/OAP_Javascript'

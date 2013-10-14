@@ -20,26 +20,29 @@ if not awful.util.file_readable(themes .. themename .. "/theme.lua") then
 end
 themedir = themes .. themename
 
-wallpaper1    = themedir .. "/background.jpg"
-wallpaper2    = themedir .. "/background.png"
-wallpaper3    = sharedthemes .. "/zenburn/zenburn-background.png"
-wallpaper4    = sharedthemes .. "/default/background.png"
-wpscript      = home .. "/.wallpaper"
-wpscript2     = themedir .. "/niceandclean.sh"
+--wallpaper1    = themedir .. "/background.jpg"
+--wallpaper2    = themedir .. "/background.png"
+--wallpaper3    = sharedthemes .. "/zenburn/zenburn-background.png"
+--wallpaper4    = sharedthemes .. "/default/background.png"
+--wpscript      = home .. "/.wallpaper"
+--wpscript2     = themedir .. "/niceandclean.sh"
 
-if awful.util.file_readable(wpscript2) then
-	theme.wallpaper_cmd = { "sh " .. wpscript2 }
-elseif awful.util.file_readable(wallpaper1) then
-	theme.wallpaper_cmd = { "awsetbg " .. wallpaper1 }
-elseif awful.util.file_readable(wallpaper2) then
-	theme.wallpaper_cmd = { "awsetbg " .. wallpaper2 }
-elseif awful.util.file_readable(wpscript) then
-	theme.wallpaper_cmd = { "sh " .. wpscript }
-elseif awful.util.file_readable(wallpaper3) then
-	theme.wallpaper_cmd = { "awsetbg " .. wallpaper3 }
-else
-	theme.wallpaper_cmd = { "awsetbg " .. wallpaper4 }
-end
+--~ if awful.util.file_readable(wpscript2) then
+	--~ theme.wallpaper_cmd = { "sh " .. wpscript2 }
+--~ elseif awful.util.file_readable(wallpaper1) then
+	--~ theme.wallpaper_cmd = { "awsetbg " .. wallpaper1 }
+--~ elseif awful.util.file_readable(wallpaper2) then
+	--~ theme.wallpaper_cmd = { "awsetbg " .. wallpaper2 }
+--~ elseif awful.util.file_readable(wpscript) then
+	--~ theme.wallpaper_cmd = { "sh " .. wpscript }
+--~ elseif awful.util.file_readable(wallpaper3) then
+	--~ theme.wallpaper_cmd = { "awsetbg " .. wallpaper3 }
+--~ else
+	--~ theme.wallpaper_cmd = { "awsetbg " .. wallpaper4 }
+--~ end
+
+--theme.wallpaper_cmd = { "awsetbg /home/andrey/Pictures/Wallpapers/1371805146.89.jpg"}
+theme.wallpaper_cmd = { "awsetbg /home/andrey/Pictures/Wallpapers/venice_streets.jpg"}
 
 if awful.util.file_readable(config .. "/vain/init.lua") then
     theme.useless_gap_width  = "3"
@@ -58,7 +61,7 @@ theme.fg_focus      = "#000000"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
-theme.border_width  = "2"
+theme.border_width  = "0"
 theme.border_normal = "#747474"
 --theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"

@@ -25,11 +25,49 @@ end
 procs = {
     "gnome-settings-daemon", 
     "nm-applet", 
-    "xbacklight -set 50"}
+    "xbacklight -set 50",
+    "kbdd",
+    "conky",
+    "xset m 11/8 5"
+    --"cairo-compmgr"
+}
 for k = 1, #procs do
     start_daemon(procs[k])
 end
 --}}
+
+--~ -- {{{ Random Wallpapers
+--~ -- Get the list of files from a directory. Must be all images or folders and non-empty. 
+    --~ function scanDir(directory)
+	--~ local i, fileList, popen = 0, {}, io.popen
+	--~ for filename in popen([[find "]] ..directory.. [[" -type f]]):lines() do
+	    --~ i = i + 1
+	    --~ fileList[i] = filename
+	--~ end
+	--~ return fileList
+    --~ end
+    --~ wallpaperList = scanDir("/home/andrey/Pictures/Wallpapers/Best/1680x1050/")
+--~ 
+--~ -- Apply a random wallpaper on startup.
+    --~ gears.wallpaper.maximized(wallpaperList[math.random(1, #wallpaperList)], s, true)
+--~ 
+--~ -- Apply a random wallpaper every changeTime seconds.
+    --~ changeTime = 10
+    --~ wallpaperTimer = timer { timeout = changeTime }
+    --~ wallpaperTimer:connect_signal("timeout", function()
+	--~ gears.wallpaper.maximized(wallpaperList[math.random(1, #wallpaperList)], s, true)
+--~ 
+    --~ -- stop the timer (we don't need multiple instances running at the same time)
+    --~ wallpaperTimer:stop()
+--~ 
+    --~ --restart the timer
+    --~ wallpaperTimer.timeout = changeTime
+    --~ wallpaperTimer:start()
+    --~ end)
+--~ 
+    --~ -- initial start when rc.lua is first run
+    --~ wallpaperTimer:start()
+--~ -- }}}
 
 -- Autorun programs
 --[[
@@ -235,7 +273,7 @@ kbdwidget.border_width = 1
 kbdwidget.border_color = beautiful.fg_normal
 kbdwidget.text = " Eng "
 dbus.request_name("session", "ru.gentoo.kbdd")
-dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
+dbus.add_match("session", "interface='ru.gentoo.kbdd', member='layoutChanged'")
 dbus.add_signal("ru.gentoo.kbdd", function(...)
     local data = {...}
     local layout = data[2]
@@ -433,9 +471,9 @@ globalkeys = awful.util.table.join(
     --awful.key({ modkey }, "F11", function () volumecfg.down() end),
     
     -- Custom programs
-    awful.key({ modkey }, "g", function () awful.util.spawn("chromium-browser") end),
+    awful.key({ modkey }, "g", function () awful.util.spawn("google-chrome") end),
     awful.key({ modkey }, "s", function () awful.util.spawn("skype") end),
-    awful.key({ modkey }, "p", function () awful.util.spawn("pidgin") end)
+    awful.key({ modkey }, "d", function () awful.util.spawn("doublecmd") end)
 )
 
 clientkeys = awful.util.table.join(
@@ -525,12 +563,16 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-	{ rule = { class = "Chromium-browser"},
+	{ rule = { class = "Google-chrome"},
 	  properties = { tag = tags[1][1]} },
 	{ rule = { class = "Pidgin"},
 	  properties = { tag = tags[1][5]} },
 	{ rule = { class = "Skype"},
-	  properties = { tag = tags[1][6]} } 
+	  properties = { tag = tags[1][6]} },
+	{ rule = { class = "qbittorrent" },
+      properties = { floating = true } },
+    { rule = { class = "geany"},
+      properties = { floating = true } }
 }
 -- }}}
 
@@ -561,10 +603,18 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+--client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("focus", 
+        function(c) 
+                if c.maximized_horizontal == true and c.maximized_vertical == true then
+                        c.border_width = "0"
+                        c.border_color = beautiful.border_focus 
+                else
+                        c.border_width = beautiful.border_width
+                        c.border_color = beautiful.border_focus
+                end
+        end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-
- 
 
 -- }}}
 --

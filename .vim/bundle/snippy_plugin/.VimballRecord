@@ -1,0 +1,1 @@
+snippy_plugin.vba: call delete('/home/kirill/.vim/bundle/snippy_plugin/plugin/snippetsEmu.vim')|call delete('/home/kirill/.vim/bundle/snippy_plugin/doc/snippets_emu.txt')
