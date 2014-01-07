@@ -23,12 +23,16 @@ function start_daemon(dae)
     end
 end
 procs = {
-    "gnome-settings-daemon", 
+    "gnome-settings-daemon",
     "nm-applet", 
     "xbacklight -set 50",
     "kbdd",
+    "bluetooth-applet",
     "conky",
-    "xset m 11/8 5"
+    "xset m 11/8 5",
+    "mpd",
+    --"~/music_widget_script.sh"
+    --"xflu  -l 51a.6569 -g 39.2025 -k 3700"
     --"cairo-compmgr"
 }
 for k = 1, #procs do
@@ -36,56 +40,7 @@ for k = 1, #procs do
 end
 --}}
 
---~ -- {{{ Random Wallpapers
---~ -- Get the list of files from a directory. Must be all images or folders and non-empty. 
-    --~ function scanDir(directory)
-	--~ local i, fileList, popen = 0, {}, io.popen
-	--~ for filename in popen([[find "]] ..directory.. [[" -type f]]):lines() do
-	    --~ i = i + 1
-	    --~ fileList[i] = filename
-	--~ end
-	--~ return fileList
-    --~ end
-    --~ wallpaperList = scanDir("/home/andrey/Pictures/Wallpapers/Best/1680x1050/")
---~ 
---~ -- Apply a random wallpaper on startup.
-    --~ gears.wallpaper.maximized(wallpaperList[math.random(1, #wallpaperList)], s, true)
---~ 
---~ -- Apply a random wallpaper every changeTime seconds.
-    --~ changeTime = 10
-    --~ wallpaperTimer = timer { timeout = changeTime }
-    --~ wallpaperTimer:connect_signal("timeout", function()
-	--~ gears.wallpaper.maximized(wallpaperList[math.random(1, #wallpaperList)], s, true)
---~ 
-    --~ -- stop the timer (we don't need multiple instances running at the same time)
-    --~ wallpaperTimer:stop()
---~ 
-    --~ --restart the timer
-    --~ wallpaperTimer.timeout = changeTime
-    --~ wallpaperTimer:start()
-    --~ end)
---~ 
-    --~ -- initial start when rc.lua is first run
-    --~ wallpaperTimer:start()
---~ -- }}}
-
--- Autorun programs
---[[
-autorun = true
-autorunApps = 
-{
-   "gnome-settings-daemon",
-   "xbacklight -set 50"
-}
-if autorun then
-for app = 1, #autorunApps do
-    awful.util.spawn(autorunApps[app], false)
-end
-end
-awful.util.spawn_with_shell("pgrep -u $USER -x nm-applet > /dev/null || (nm-applet &)")
---]]
-
--- {{{ Error handling
+--- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -114,6 +69,8 @@ end
 -- Themes define colours, icons, and wallpapers
 --beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 beautiful.init("/home/andrey/.config/awesome/themes/niceandclean/theme.lua")
+--os.execute("find $HOME/Pictures/Wallpapers -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs awsetbg") 
+
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -138,8 +95,8 @@ layouts =
     awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
---    awful.layout.suit.spiral,
---    awful.layout.suit.spiral.dwindle,
+    awful.layout.suit.spiral,
+    awful.layout.suit.spiral.dwindle,
 --    awful.layout.suit.max,
 --    awful.layout.suit.max.fullscreen,
 --    awful.layout.suit.magnifier
@@ -149,7 +106,7 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-	names = {"Web", "Main", "Work", "Term", "IM", "Skype", "Media"},
+	names = {"Web", "Main", "Work", "Term", "Stuff", "Skype", "Media"},
 	layout = {layouts[1],
 			  layouts[3],
 			  layouts[4],
@@ -194,20 +151,6 @@ mytextclock = awful.widget.textclock(
 -- Calendar widget to attach to the textclock
 require('calendar2')
 calendar2.addCalendarToWidget(mytextclock, "<span color='green'>%s</span>")
-
--- Create a battery widget
---batterybox = widget({ type = "textbox" })
---batterybox.text = ""
---function get_battery_status()
-    --local filedescriptor = io.popen('acpi -b | cut -f2 -d"," | sed -e "s/[[:space:]]//g"')
-    --local value = filedescriptor:read()
-    --filedescriptor:close()
-    --return value
---end
---batterybox.text = get_battery_status()
---battery_timer = timer({ timeout = 60 })
---battery_timer:add_signal("timeout", function() batterybox.text = get_battery_status() end)
---battery_timer:start()
 
 -- Battery widget
 batwidget = widget({ type = "textbox"})
@@ -283,6 +226,31 @@ dbus.add_signal("ru.gentoo.kbdd", function(...)
 )
 --- keyboard indicator }}}
 
+--- { Music widget
+--mpd_text_box = widget({ type = "textbox", align = "right" })
+--mpd_text_box.text = ""
+--mpd_time_box = widget({ type = "textbox", align = "right" })
+--mpd_time_box.text = ""
+--
+--mpd_text_max_size = 50
+--mpd_text = ""
+--
+--function mpd_text_rotate()
+--    if string.len(mpd_text) >= mpd_text_max_size then
+--        mpd_text = string.gsub(mpd_text, '^(.)(.+)$', '%2%1')
+--        mpd_text_box.text = string.sub(mpd_text, 1, mpd_text_max_size).."..."
+--    else
+--        mpd_text_box.text = mpd_text
+--    end
+--end
+--
+--mytimer = timer({timeout = 1})
+--mytimer:add_signal("timeout", function() 
+--  mpd_text_rotate()
+--end)
+--mytimer:start()
+--- }
+
 -- {{{ Icons
 cpu_icon = widget({ type = "imagebox" })
 cpu_icon.image = image(beautiful.cpu_icon)
@@ -299,6 +267,56 @@ volume_icon.image = image(beautiful.volume_icon)
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
+
+
+-- { Music awesome widget
+require("awesompd/awesompd")
+musicwidget = awesompd:create() -- Create awesompd widget
+musicwidget.font = "Liberation Mono" -- Set widget font 
+musicwidget.scrolling = true -- If true, the text in the widget will be scrolled
+musicwidget.output_size = 30 -- Set the size of widget in symbols
+musicwidget.update_interval = 10 -- Set the update interval in seconds
+-- Set the folder where icons are located (change username to your login name)
+musicwidget.path_to_icons = "/home/andrey/.config/awesome/awesompd/icons" 
+-- Set the default music format for Jamendo streams. You can change
+-- this option on the fly in awesompd itself.
+-- possible formats: awesompd.FORMAT_MP3, awesompd.FORMAT_OGG
+musicwidget.jamendo_format = awesompd.FORMAT_MP3
+-- If true, song notifications for Jamendo tracks and local tracks will also contain
+-- album cover image.
+musicwidget.show_album_cover = true
+-- Specify how big in pixels should an album cover be. Maximum value
+-- is 100.
+musicwidget.album_cover_size = 50
+-- This option is necessary if you want the album covers to be shown
+-- for your local tracks.
+musicwidget.mpd_config = "/home/andrey/.mpdconf"
+-- Specify the browser you use so awesompd can open links from
+-- Jamendo in it.
+musicwidget.browser = "firefox"
+-- Specify decorators on the left and the right side of the
+-- widget. Or just leave empty strings if you decorate the widget
+-- from outside.
+musicwidget.ldecorator = " "
+musicwidget.rdecorator = " "
+-- Set all the servers to work with (here can be any servers you use)
+musicwidget.servers = {
+   { server = "localhost",
+        port = 6600 },
+   { server = "192.168.0.72",
+        port = 6600 } }
+-- Set the buttons of the widget
+musicwidget:register_buttons({ { "", awesompd.MOUSE_LEFT, musicwidget:command_toggle() },
+                   { "Control", awesompd.MOUSE_SCROLL_UP, musicwidget:command_prev_track() },
+             { "Control", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_next_track() },
+             { "", awesompd.MOUSE_SCROLL_UP, musicwidget:command_volume_up() },
+             { "", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_volume_down() },
+             { "", awesompd.MOUSE_RIGHT, musicwidget:command_show_menu() },
+                               { "", "XF86AudioLowerVolume", musicwidget:command_volume_down() },
+                               { "", "XF86AudioRaiseVolume", musicwidget:command_volume_up() },
+                               { modkey, "Pause", musicwidget:command_playpause() } })
+musicwidget:run() -- After all configuration is done, run the widget
+--- }
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -366,6 +384,7 @@ for s = 1, screen.count() do
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
+
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
@@ -378,6 +397,8 @@ for s = 1, screen.count() do
         separator,
         batwidget, battery_icon, separator,
         mytextclock, separator,
+        --mpd_text_box, separator,
+        musicwidget.widget, separator,
         memwidget, mem_icon, separator,
         cpuwidget, cpu_icon, separator,
         volumecfg.widget, volume_icon, separator,
@@ -467,14 +488,15 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function () volumecfg.up() end),
     awful.key({ }, "XF86AudioLowerVolume", function () volumecfg.down() end),
     --awful.key({ }, "XF86AudioMute", function () volumecfg.toggle() end))
-    --awful.key({ modkey }, "F12", function () volumecfg.up() end),
-    --awful.key({ modkey }, "F11", function () volumecfg.down() end),
+    awful.key({ modkey }, "F1", function () volumecfg.up() end),
+    awful.key({ modkey }, "F2", function () volumecfg.down() end),
     
     -- Custom programs
     awful.key({ modkey }, "g", function () awful.util.spawn("google-chrome") end),
     awful.key({ modkey }, "s", function () awful.util.spawn("skype") end),
-    awful.key({ modkey }, "d", function () awful.util.spawn("doublecmd") end)
-)
+    awful.key({ modkey }, "d", function () awful.util.spawn("doublecmd") end),
+
+    awful.key({ modkey, "Control" }, "w", function() os.execute("find $HOME/Pictures/Wallpapers -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs awsetbg") end))
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
