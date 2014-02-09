@@ -29,7 +29,7 @@ if awful.util.file_readable(config .. "/vain/init.lua") then
 end
 --}}}
 
-theme.font          = "sans 8"
+theme.font          = "Liberation Mono 8.2"
 
 theme.bg_normal     = "#222222"
 theme.bg_focus      = "#d8d8d8"
@@ -120,5 +120,6 @@ theme.cpu_icon = config .. "/icons/cpu.png"
 theme.battery_icon = config .. "/icons/bat.png"
 theme.mem_icon = config .. "/icons/mem.png"
 theme.volume_icon = config .. "/icons/vol.png"
+theme.music_icon = config .. "/icons/music.png"
 
 return theme

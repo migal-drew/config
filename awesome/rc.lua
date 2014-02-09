@@ -29,10 +29,8 @@ procs = {
     "kbdd",
     "bluetooth-applet",
     "conky",
-    "xset m 11/8 5",
+    "xset m 1/3 1",
     "mpd",
-    --"~/music_widget_script.sh"
-    --"xflu  -l 51a.6569 -g 39.2025 -k 3700"
     --"cairo-compmgr"
 }
 for k = 1, #procs do
@@ -106,7 +104,7 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {
-	names = {"Web", "Main", "Work", "Term", "Stuff", "Skype", "Media"},
+	names = {"Web", "Main", "Work", "Term", "Music", "Skype", "Media"},
 	layout = {layouts[1],
 			  layouts[3],
 			  layouts[4],
@@ -143,7 +141,7 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- {{{ Wibox
 -- Separator
 separator = widget({ type = "textbox" })
-separator.text  = " | "
+separator.text  = "   "
 
 -- Create a textclock widget
 mytextclock = awful.widget.textclock(
@@ -199,9 +197,9 @@ volumecfg.update()
 ---- CPU usage widget
 -- Initialize widget
 cpuwidget = widget({ type = "textbox" })
-cpuwidget.width = 50
+cpuwidget.width = 85
 -- Register widget
-vicious.register(cpuwidget, vicious.widgets.cpu, "CPU $1%")
+vicious.register(cpuwidget, vicious.widgets.cpu, "CPU $2%, $3%")
 
 ---- Memory usage widget
 -- Initialize widget
@@ -212,7 +210,7 @@ vicious.register(memwidget, vicious.widgets.mem, "RAM $1% ($2 MB)", 13)
 --- {{{ keyboard indicator
 -- Keyboard layout widget
 kbdwidget = widget({type = "textbox", name = "kbdwidget"})
-kbdwidget.border_width = 1
+kbdwidget.border_width = 0
 kbdwidget.border_color = beautiful.fg_normal
 kbdwidget.text = " Eng "
 dbus.request_name("session", "ru.gentoo.kbdd")
@@ -226,31 +224,6 @@ dbus.add_signal("ru.gentoo.kbdd", function(...)
 )
 --- keyboard indicator }}}
 
---- { Music widget
---mpd_text_box = widget({ type = "textbox", align = "right" })
---mpd_text_box.text = ""
---mpd_time_box = widget({ type = "textbox", align = "right" })
---mpd_time_box.text = ""
---
---mpd_text_max_size = 50
---mpd_text = ""
---
---function mpd_text_rotate()
---    if string.len(mpd_text) >= mpd_text_max_size then
---        mpd_text = string.gsub(mpd_text, '^(.)(.+)$', '%2%1')
---        mpd_text_box.text = string.sub(mpd_text, 1, mpd_text_max_size).."..."
---    else
---        mpd_text_box.text = mpd_text
---    end
---end
---
---mytimer = timer({timeout = 1})
---mytimer:add_signal("timeout", function() 
---  mpd_text_rotate()
---end)
---mytimer:start()
---- }
-
 -- {{{ Icons
 cpu_icon = widget({ type = "imagebox" })
 cpu_icon.image = image(beautiful.cpu_icon)
@@ -263,6 +236,9 @@ mem_icon.image = image(beautiful.mem_icon)
 
 volume_icon = widget({ type = "imagebox"})
 volume_icon.image = image(beautiful.volume_icon)
+
+music_icon = widget({ type = "imagebox" })
+music_icon.image = image(beautiful.music_icon)
 -- }}} Icons
 
 -- Create a systray
@@ -274,7 +250,7 @@ require("awesompd/awesompd")
 musicwidget = awesompd:create() -- Create awesompd widget
 musicwidget.font = "Liberation Mono" -- Set widget font 
 musicwidget.scrolling = true -- If true, the text in the widget will be scrolled
-musicwidget.output_size = 30 -- Set the size of widget in symbols
+musicwidget.output_size = 45 -- Set the size of widget in symbols
 musicwidget.update_interval = 10 -- Set the update interval in seconds
 -- Set the folder where icons are located (change username to your login name)
 musicwidget.path_to_icons = "/home/andrey/.config/awesome/awesompd/icons" 
@@ -320,6 +296,8 @@ musicwidget:run() -- After all configuration is done, run the widget
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+mywibox_bottom = {}
+
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -384,6 +362,7 @@ for s = 1, screen.count() do
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox_bottom[s] = awful.wibox({ position = "bottom", screen = s })
 
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
@@ -394,17 +373,29 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
+        -- separator,
+        -- batwidget, battery_icon, separator,
+        -- mytextclock, separator,
+        -- musicwidget.widget, music_icon, separator,
+        -- memwidget, mem_icon, separator,
+        -- cpuwidget, cpu_icon, separator,
+        -- volumecfg.widget, volume_icon, separator,
+        -- kbdwidget, separator,
+        s == 1 and mysystray or nil,
+        mytasklist[s],
+        layout = awful.widget.layout.horizontal.rightleft
+    }
+
+    mywibox_bottom[s].widgets = {
+        --mylayoutbox[s],
         separator,
         batwidget, battery_icon, separator,
         mytextclock, separator,
-        --mpd_text_box, separator,
-        musicwidget.widget, separator,
+        musicwidget.widget, music_icon, separator,
         memwidget, mem_icon, separator,
         cpuwidget, cpu_icon, separator,
         volumecfg.widget, volume_icon, separator,
         kbdwidget, separator,
-        s == 1 and mysystray or nil,
-        mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
