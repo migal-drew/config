@@ -158,9 +158,18 @@ nmap <silent> <S-Right> :wincmd l<CR>
 
 nmap <silent> <Bar> :vs <CR>
 nmap <silent> <C-Bslash> :split <CR>
+
+"Maximize current window
+nmap <silent> <S-m> :wincmd _<CR> 
+"Make windows equal size
+nmap <silent> <A-m> :wincmd =<CR>
+
+nmap <silent> <S-z> :wq <CR>
+nmap <silent> <S-q> :q! <CR>
+
 syntax on "Включить подсветку синтаксиса
 set nu "Включаем нумерацию строк
 set mouse=a "Включить поддержку мыши
 
 " Unset the "last search pattern" register by hitting return
-nnoremap <CR> :noh<CR><CR>
+noremap <CR> :noh<CR><CR>
