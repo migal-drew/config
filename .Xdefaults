@@ -1,0 +1,91 @@
+Xft.hinting: 1
+Xft.hintstyle: hintfull
+Xft.antialias: 1
+Xft.dpi: 96
+
+URxvt.depth:                256
+URxvt.internalBorder:       3
+URxvt.lineSpace:            0
+!URxvt.font: 9x15
+
+*iso14755: false
+*iso14755_52: false
+
+! General
+urxvt*termName:  rxvt-256color
+urxvt*loginShell:         true
+urxvt*scrollBar:         false
+urxvt*secondaryScroll:    true
+urxvt*saveLines:         65535
+urxvt*cursorBlink:       true
+urxvt*urgentOnBell:       true
+ 
+urxvt*transparent:  true
+urxvt*shading: 15
+
+urxvt*font:     xft:terminus:size=12
+!urxvt*background: white
+urxvt*foreground: #dadada
+
+*color0:  #2E3436
+*color1:  #a40000
+*color2:  #4E9A06
+*color3:  #C4A000
+*color4:  #3465A4
+*color5:  #75507B
+*color6:  #ce5c00
+*color7:  #babdb9
+*color8:  #555753
+*color9:  #EF2929
+*color10: #8AE234
+*color11: #FCE94F
+*color12: #729FCF
+*color13: #AD7FA8
+*color14: #fcaf3e
+*color15: #EEEEEC
+
+URxvt.keysym.S-Up             : \033[a
+URxvt.keysym.S-Down           : \033[b
+URxvt.keysym.S-Right          : \033[c
+URxvt.keysym.S-Left           : \033[d
+
+
+!*background: #002b36
+!*foreground: #657b83
+
+!*fadeColor: #003b36
+!*cursorColor: #93a1a1
+!*pointerColorBackground: #586e75
+!*pointerColorForeground: #93a1a1
+! 
+!!! black dark/light
+!*color0: #073642
+!*color8: #002b36
+! 
+!!! red dark/light
+!*color1: #dc322f
+!*color9: #cb4b16
+! 
+!!! green dark/light
+!*color2: #859900
+!*color10: #586e75
+! 
+!!! yellow dark/light
+!*color3: #b58900
+!*color11: #657b83
+! 
+!!! blue dark/light
+!*color4: #268bd2
+!*color12: #839496
+! 
+!!! magenta dark/light
+!*color5: #d33682
+!*color13: #6c71c4
+! 
+!!! cyan dark/light
+!*color6: #2aa198
+!*color14: #93a1a1
+! 
+!!! white dark/light
+!*color7: #eee8d5
+!*color15: #fdf6e3
