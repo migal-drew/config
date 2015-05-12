@@ -1,134 +1,98 @@
+"------------------Colors and colorschemes----------------------
 if has("gui_running")
-  colorscheme wombat256mod "Mellow
-  set guifont=Ubuntu\ Mono\ 13
+  set background=dark
+  colorscheme solarized
 else
   colorscheme wombat256mod
+  autocmd ColorScheme * highlight NonText guifg=#e3e0d7	guibg=#242424
 endif
 
+" Change declared colors in colorscheme for popup menu
+highlight Pmenu guibg=#444D45
+highlight PmenuSel guibg=#C0C700
+highlight PmenuSel guifg=#2F3630
+"---------------------------------------------------------------
 
-"Вырубаем режим совместимости с VI:
+"-----------Primary settings------------------------------------
+" Turn off compatibility mode  VI:
 set nocompatible
 
-"pathogen init
+"Pathogen init
 call pathogen#infect()
 
-
-autocmd ColorScheme * highlight NonText guifg=#e3e0d7	guibg=#242424
-
-set ttyfast
-
-"Инкрементный поиск
+" Incremental search
 set ignorecase
 set smartcase
 set incsearch
 set hlsearch
 
 set ruler
+set cursorline
 
-"Включаем распознавание типов файлов и типо-специфичные плагины:
 filetype plugin indent on
 
-"Настройки табов для Python, согласно рекомендациям
+" TABs settings
 set tabstop=2
 set shiftwidth=2
 set smarttab
-set expandtab "Ставим табы пробелами
+" TABs as SPACEs
+set expandtab 
 set softtabstop=2
-"Автоотступ
+
 set autoindent
 set smartindent
 
-
-"ignore caps
+" Ignore caps
 set ic
-"Подсвечиваем все что можно подсвечивать
-"let python_highlight_all = 1
-"Включаем 256 цветов в терминале, мы ведь работаем из иксов?
-"Нужно во многих терминалах, например в gnome-terminal
+
+let python_highlight_all = 1
+
+" 256 colors in terminal
 set t_Co=256
 
-"Настройка omnicomletion
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-"Перед сохранением вырезаем пробелы на концах (только в .py файлах)
-autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
-"В .py файлах включаем умные отступы после ключевых слов
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-
-" Для embedded javascript
-autocmd BufRead *.html set smartindent cinwords=if,else,for,while,function
-
-" CTRL-X and SHIFT-Del are Cut
-vnoremap <S-Del> "+x
-
-
-" CTRL-C and CTRL-Insert are Copy
-vnoremap <C-C> "+y
-vnoremap <C-Insert> "+y
-
-" CTRL-V and SHIFT-Insert are Paste
-"map <C-V> "+gP
-"map <S-Insert> "+gP
-
-"cmap <C-V> <C-R>+
-"cmap <S-Insert> <C-R>+
-
-"imap <S-Insert> <C-V>
-"vmap <S-Insert> <C-V>
-
-
-syntax on "Включить подсветку синтаксиса
-set nu "Включаем нумерацию строк
-set mouse=a "Включить поддержку мыши
-set termencoding=utf-8 "Кодировка терминала
-set novisualbell "Не мигать 
-"Удобное поведение backspace
+syntax on 
+set nu 
+set mouse=a 
+set termencoding=utf-8 
+set novisualbell 
 set backspace=indent,eol,start whichwrap+=<,>,[,]
-"Вырубаем черточки на табах
 set showtabline=0
-"Колоночка, чтобы показывать плюсики для скрытия блоков кода:
+" Show plus_button to show/close code blocks
 set foldcolumn=1
 
-"Переносим на другую строчку, разрываем строки
 set wrap
 set linebreak
 
-"Вырубаем .swp и ~ (резервные) файлы
+" Make scrolling faster
+set lazyredraw
+
+" Disable backup/swap files
 set nobackup
 set noswapfile
-set encoding=utf-8 " Кодировка файлов по умолчанию
-set fileencodings=utf8,cp1251 " Возможные кодировки файлов, если файл не в unicode кодировке,
-" то будет использоваться cp1251
-imap <special><F5> <ESC>:w\|!python %<CR>
-nmap <F5> :w\|!python %<CR>
 
-"Включаем плагин nerdtree
+" Default encoding
+set encoding=utf-8
+" Fallback encoding
+set fileencodings=utf8,cp1251
+
+" Cut spaces in the end of .py files
+autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
+
+" Smart indent in .py files
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+
+" Embedded javascript
+autocmd BufRead *.html set smartindent cinwords=if,else,for,while,function
+"-------------------------------------------------------------------------------------------------
+
+
+"----------------------Plugins setting---------------------------
+" Enable cool NERDTREE plugin
 autocmd vimenter * NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 autocmd VimEnter * wincmd l
 
-" pressing < or > will let you indent/unident selected lines
-vnoremap < <gv
-vnoremap > >gv
-
-" If the current buffer has never been saved, it will have no name,
-" " call the file browser to save it, otherwise just save it.
-noremap <silent> <C-S> :if expand("%") == ""<CR>browse confirm w<CR>else<CR>confirm w<CR>endif<CR>
-
 let g:neocomplcache_enable_at_startup = 1
-
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
@@ -139,37 +103,51 @@ let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 
 set completeopt+=longest
+
+" Add fuzzy file open feature
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+"----------------------------------------------------------------
+
+"----------------Shortcut settings-------------------------------
+" If the current buffer has never been saved, it will have no name,
+" call the file browser to save it, otherwise just save it.
+noremap <silent> <C-S> :if expand("%") == ""<CR>browse confirm w<CR>else<CR>confirm w<CR>endif<CR>
+
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplcache#undo_completion()
+inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
-" Change declared colors in colorscheme for popup menu
-highlight Pmenu guibg=#444D45
-highlight PmenuSel guibg=#C0C700
-highlight PmenuSel guifg=#2F3630
-
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-
-" Shift + arrow will navigate through open tabs
+" Shift+Arrow will navigate through open tabs
 nmap <silent> <S-Up> :wincmd k<CR>
 nmap <silent> <S-Down> :wincmd j<CR>
 nmap <silent> <S-Left> :wincmd h<CR>
 nmap <silent> <S-Right> :wincmd l<CR>
 
+" Shortcuts to horizontal/vertical window split
 nmap <silent> <Bar> :vs <CR>
 nmap <silent> <C-Bslash> :split <CR>
 
-"Maximize current window
+" Maximize current window
 nmap <silent> <S-m> :wincmd _<CR> 
-"Make windows equal size
+" Make windows equal size
 nmap <silent> <A-m> :wincmd =<CR>
 
-nmap <silent> <S-z> :wq <CR>
-nmap <silent> <S-q> :q! <CR>
+nmap <silent> <S-z><q> :q! <CR>
 
-syntax on "Включить подсветку синтаксиса
-set nu "Включаем нумерацию строк
-set mouse=a "Включить поддержку мыши
+" Disable shift+q annoying visual mode
+nmap <silent> <S-q> :noh <CR>
 
 " Unset the "last search pattern" register by hitting return
 noremap <CR> :noh<CR><CR>
+
+" Run .py files in VIM
+imap <special><F5> <ESC>:w\|!python %<CR>
+nmap <F5> :w\|!python %<CR>
+"--------------------------------------------------------------
