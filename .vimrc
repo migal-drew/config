@@ -8,9 +8,9 @@ else
 endif
 
 " Change declared colors in colorscheme for popup menu
-highlight Pmenu guibg=#444D45
-highlight PmenuSel guibg=#C0C700
-highlight PmenuSel guifg=#2F3630
+"highlight Pmenu guibg=#444D45
+"highlight PmenuSel guibg=#C0C700
+"highlight PmenuSel guifg=#2F3630
 "---------------------------------------------------------------
 
 "-----------Primary settings------------------------------------
@@ -28,6 +28,11 @@ set hlsearch
 
 set ruler
 set cursorline
+
+set showmode
+set showcmd
+
+set wildmenu
 
 filetype plugin indent on
 
@@ -106,6 +111,10 @@ set completeopt+=longest
 
 " Add fuzzy file open feature
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" TagBar plugin (show tags in file, uses ctags)
+autocmd VimEnter * Tagbar
+nmap <F8> :TagbarToggle<CR>
 "----------------------------------------------------------------
 
 "----------------Shortcut settings-------------------------------
@@ -142,7 +151,7 @@ nmap <silent> <A-m> :wincmd =<CR>
 nmap <silent> <S-z><q> :q! <CR>
 
 " Disable shift+q annoying visual mode
-nmap <silent> <S-q> :noh <CR>
+nmap <silent> <S-q> :nop
 
 " Unset the "last search pattern" register by hitting return
 noremap <CR> :noh<CR><CR>
@@ -150,4 +159,6 @@ noremap <CR> :noh<CR><CR>
 " Run .py files in VIM
 imap <special><F5> <ESC>:w\|!python %<CR>
 nmap <F5> :w\|!python %<CR>
+
+inoremap jj <Esc>
 "--------------------------------------------------------------
