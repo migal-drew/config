@@ -37,12 +37,12 @@ set wildmenu
 filetype plugin indent on
 
 " TABs settings
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set smarttab
 " TABs as SPACEs
 set expandtab 
-set softtabstop=2
+set softtabstop=4
 
 set autoindent
 set smartindent
